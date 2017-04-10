@@ -34,5 +34,6 @@
 	<classpathentry kind="lib" path="C:/Users/Jesus/workspace/coolbeer-server/lib/httpclient-win-4.5.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jesus/workspace/coolbeer-server/lib/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jesus/workspace/coolbeer-server/lib/httpmime-4.5.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Jesus/workspace/coolbeer-server/lib/gson-2.3.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
