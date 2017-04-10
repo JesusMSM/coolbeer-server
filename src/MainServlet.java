@@ -28,6 +28,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -75,6 +77,16 @@ public class MainServlet extends HttpServlet {
         try {
 			String result = instance.doOCR(imageFile);
 			System.out.println(result);
+			
+			// LIRE DE LA BASE DE DONNEES
+			
+			// CREER LOBJECT JSON
+			
+			String json = new Gson().toJson(someObject);
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    response.getWriter().write(json);
+		    
 		} catch (TesseractException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
