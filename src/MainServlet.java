@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,11 +27,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.ResultSet;
+import com.mysql.jdbc.Statement;
 
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.util.LoadLibs;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class MainServlet
@@ -77,23 +81,22 @@ public class MainServlet extends HttpServlet {
         try {
 			String result = instance.doOCR(imageFile);
 			System.out.println(result);
+        
+			lireEnBase();
 			
-			// LIRE DE LA BASE DE DONNEES
-			
-			// CREER LOBJECT JSON
-			
-			String json = new Gson().toJson(someObject);
-		    response.setContentType("application/json");
-		    response.setCharacterEncoding("UTF-8");
-		    response.getWriter().write(json);
-		    
-		} catch (TesseractException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	    
-		
+     // LIRE DE LA BASE DE DONNEES
+
+     // CREER LOBJECT JSON
+
+     String json = new Gson().toJson(someObject);
+     response.setContentType("application/json");
+     response.setCharacterEncoding("UTF-8");
+     response.getWriter().write(json);
+
+     } catch (TesseractException e) {
+     // TODO Auto-generated catch block
+     e.printStackTrace();
+     }
 		
 	
 		
@@ -169,4 +172,55 @@ public class MainServlet extends HttpServlet {
 		  return jsonObj;
 		}
 
+
+
+public static void lireEnBase() {
+
+
+	// Information d'accès à la base de données
+	String url = "jdbc:mysql://localhost/coolbeer_magasins";
+	String login = "root";
+	String passwd = "coolserver";
+	Connection cn =null;
+	Statement st =null;
+	ResultSet rs =null;
+	
+	try {
+
+		// Etape 1 : Chargement du driver
+		Class.forName("com.mysql.jdbc.Driver");
+
+		// Etape 2 : récupération de la connexion
+		cn = (Connection) DriverManager.getConnection(url, login, passwd);
+
+		// Etape 3 : Création d'un statement
+		st = (Statement) cn.createStatement();
+
+		String sql = "SELECT * FROM beer";
+
+		// Etape 4 : exécution requête
+		rs = (ResultSet) st.executeQuery(sql);
+
+		// Si récup données alors étapes 5 (parcours Resultset)
+
+		while (rs.next()) {
+			System.out.println(rs.getString("Name_beer"));
+			
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} catch (ClassNotFoundException e) {
+		e.printStackTrace();
+	} finally {
+		try {
+		// Etape 6 : libérer ressources de la mémoire.
+			cn.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
+
+}
+
